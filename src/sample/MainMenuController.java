@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 
 public class MainMenuController {
     @FXML
-    public LineChart<Number,Number> ecgGraph;
+    public LineChart<Number, Number> ecgGraph;
     @FXML
     public TextArea ecgText;
     @FXML
@@ -24,23 +24,26 @@ public class MainMenuController {
     ThreadClass threadclass = new ThreadClass();
     String CprString;
 
+    //Dette er onAction metoden til start-knappen, og der er 3 metoder her.
     public void ECGstarter() {
-        measurements.Set(ecgText,CprString);
+        measurements.Set(ecgText, CprString);
         measurements.ShowGraph(ecgGraph);
         threadclass.getThread(threadclass.getMainThread());
     }
 
-
-    public void ECGstop(){
+    //Dette er onAction metoden til stop-knappen, som sætter en boolean til false, så tråden stopper.
+    public void ECGstop() {
         threadclass.setActiveChecker(false);
     }
 
+    //Metoden nulstiller både Linechartens indhold og TextAreas inhold, så GUI er nulstillet.
     public void Clear() {
         ecgText.clear();
         ecgGraph.getData().clear();
     }
 
-    //Denne metoder checker om der er et 10 cifret CPR nummer som kan bruges.
+    //Denne metode be- eller afkræfter det indtastede CPR-nummer ud fra passende kriterier såsom:
+    //længde og at den indtastede tekst udelukkende indeholder tal, hvilket gøres vha. Numberchecker().
     public void CPR_Check() {
         try {
             CprString = String.valueOf(CPR_Nummer.getText());
@@ -49,13 +52,13 @@ public class MainMenuController {
         }
         if (CprString.length() == 10) {
             measurements.CprTilSQL = CprString;
-            AlertPopUp("CPR", "CPR is verified");}
-        else {
+            AlertPopUp("CPR", "CPR is verified");
+        } else {
             AlertPopUp("CPR Error", "CPR shall be 10 digits");
         }
     }
 
-
+    //Denne metoder bruges til at lave AlertPopUps, som bruges hvis man indtaster et ugyldigt CPR-nummer.
     public void AlertPopUp(String AlertTitle, String AlertNote) {
         Stage AlertBox = new Stage();
         AlertBox.initModality(Modality.APPLICATION_MODAL);
